@@ -19,7 +19,7 @@ def send_dates_by_mail(dates):
     smtpclient.starttls()
     smtpclient.login(os.getenv('GMAIL_USERNAME'), os.getenv('GMAIL_PASSWORD'))
     msg = "From: me@localhost\n" \
-          "Subject: Dates found\n\n"
+          "Subject: New dates found for Clalit appointment\n\n"
 
     msg += "\n".join(["{} - {}".format(x['profession_name'], x['date']) for x in dates])
 
@@ -42,7 +42,7 @@ class ClalitChecker(scrapy.Spider):
              datetime.datetime.strptime(visit.css("span.visitDateTime")[0].root.text, "%d.%m.%Y"),
              visit.css("div.professionName")[0].root.text
              )
-            for visit in response.css("#visits li.visit") if 'data-id' in visit.attrib
+            for visit in response.css("li.visit") if 'data-id' in visit.attrib
         ]
         month = datetime.datetime.now().month
         year = datetime.datetime.now().year
